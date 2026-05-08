@@ -1,0 +1,66 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #333;
+  color: white;
+}
+.logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+.nav-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav-links a.active {
+  color: white;
+  border-bottom: 2px solid white;
+}
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.cart-icon {
+  position: relative;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+.btn-login, .btn-logout {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+.btn-login {
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+}
+.btn-logout {
+  background: #dc3545;
+  color: white;
+}
+.username {
+  font-weight: bold;
+}

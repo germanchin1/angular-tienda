@@ -1,0 +1,47 @@
+<div class="cart-container">
+  <h2>Mi Carrito</h2>
+
+  @if (cart.items().length === 0) {
+    <div class="empty-cart">
+      <p>Tu carrito está vacío.</p>
+      <button (click)="goCatalog()" class="btn-catalog">Ir al catálogo</button>
+    </div>
+  } @else {
+    <div class="cart-content">
+      <div class="cart-items">
+        @for (item of cart.items(); track $index) {
+          <div class="item-card">
+            <img [src]="item.product.image_url" [alt]="item.product.name">
+            <div class="item-details">
+              <h3>{{ item.product.name }}</h3>
+              <p>Talla: {{ item.size }}</p>
+              <p>Precio: {{ item.product.price | currency:'EUR' }}</p>
+              <p>Cantidad: {{ item.quantity }}</p>
+              <button (click)="cart.removeFromCart($index)" class="btn-remove">Eliminar</button>
+            </div>
+            <div class="item-subtotal">
+              {{ (item.product.price * item.quantity) | currency:'EUR' }}
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cart-summary">
+        <h3>Resumen</h3>
+        <p>Total: {{ cart.totalPrice() | currency:'EUR' }}</p>
+        
+        <div class="checkout-form">
+          <label>Dirección de envío:</label>
+          <input type="text" [(ngModel)]="address" placeholder="Calle, ciudad, CP...">
+          
+          <label>Observaciones:</label>
+          <textarea [(ngModel)]="observations" placeholder="Instrucciones de entrega..."></textarea>
+          
+          <button (click)="finishOrder()" class="btn-finish" [disabled]="!address">
+            Finalizar Pedido
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,55 @@
+<div class="admin-container">
+  <h2>Gestión de Pedidos (Admin)</h2>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders; track order.id) {
+        <tr>
+          <td>#{{ order.id }}</td>
+          <td>{{ order.user_id }}</td>
+          <td>{{ order.created_at | date:'short' }}</td>
+          <td>{{ order.total | currency:'EUR' }}</td>
+          <td>
+            <select [ngModel]="order.status" (ngModelChange)="updateStatus(order.id, $event)">
+              <option value="Pendiente">Pendiente</option>
+              <option value="Enviado">Enviado</option>
+              <option value="Entregado">Entregado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </td>
+          <td>
+            <button (click)="toggleDetails(order.id)" class="btn-details">
+              {{ expandedOrderId === order.id ? 'Ocultar' : 'Ver Detalles' }}
+            </button>
+          </td>
+        </tr>
+        @if (expandedOrderId === order.id) {
+          <tr class="details-row">
+            <td colspan="6">
+              <div class="details-content">
+                <p><strong>Dirección:</strong> {{ order.address }}</p>
+                <p><strong>Observaciones:</strong> {{ order.observations || 'N/A' }}</p>
+                <h4>Items:</h4>
+                <ul>
+                  @for (item of order.items; track item.id) {
+                    <li>{{ item.quantity }}x Producto ID {{ item.product_id }} (Talla {{ item.size }}) - {{ item.price | currency:'EUR' }}</li>
+                  }
+                </ul>
+              </div>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

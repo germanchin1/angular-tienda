@@ -1,0 +1,37 @@
+<div class="orders-container">
+  <h2>Mis Pedidos</h2>
+
+  @if (orders.length === 0) {
+    <div class="empty-state">
+      <p>Aún no has realizado ningún pedido.</p>
+    </div>
+  } @else {
+    <div class="orders-list">
+      @for (order of orders; track order.id) {
+        <div class="order-card">
+          <div class="order-header" (click)="toggleDetails(order.id)">
+            <span>Pedido #{{ order.id }}</span>
+            <span>{{ order.created_at | date:'short' }}</span>
+            <span class="status" [attr.data-status]="order.status">{{ order.status }}</span>
+            <span>{{ order.total | currency:'EUR' }}</span>
+            <span>{{ expandedOrderId === order.id ? '🔼' : '🔽' }}</span>
+          </div>
+          
+          @if (expandedOrderId === order.id) {
+            <div class="order-details">
+              <p><strong>Dirección:</strong> {{ order.address }}</p>
+              <p><strong>Observaciones:</strong> {{ order.observations || 'Ninguna' }}</p>
+              <hr>
+              <h4>Productos:</h4>
+              <ul>
+                @for (item of order.items; track item.id) {
+                  <li>{{ item.quantity }}x {{ item.product?.name }} (Talla {{ item.size }}) - {{ item.price | currency:'EUR' }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

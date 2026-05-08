@@ -1,0 +1,31 @@
+<div class="hero">
+  <h1>Bienvenido a SneakersShop</h1>
+  <p>La mejor selección de calzado deportivo a un solo clic.</p>
+  <a routerLink="/catalog" class="btn-primary">Ver Catálogo</a>
+</div>
+
+<section class="categories-section">
+  <h2>Explora por Categorías</h2>
+  <div class="category-grid">
+    @for (cat of categories; track cat.id) {
+      <div class="category-card" [routerLink]="['/catalog']" [queryParams]="{category: cat.id}">
+        <h3>{{ cat.name }}</h3>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="featured-section">
+  <h2>Productos Destacados</h2>
+  <div class="product-grid">
+    @for (prod of featuredProducts; track prod.id) {
+      <div class="product-card" [routerLink]="['/product', prod.slug]">
+        <img [src]="prod.image_url" [alt]="prod.name">
+        <div class="card-body">
+          <h3>{{ prod.name }}</h3>
+          <p class="price">{{ prod.price | currency:'EUR' }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>

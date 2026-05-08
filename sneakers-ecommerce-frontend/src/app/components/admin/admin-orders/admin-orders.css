@@ -1,0 +1,9 @@
+.admin-container { padding: 2rem; }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th, .admin-table td { padding: 1rem; border-bottom: 1px solid #ddd; text-align: left; }
+select { padding: 0.3rem; border-radius: 4px; }
+.btn-details { background: #6c757d; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; }
+.details-row { background: #f8f9fa; }
+.details-content { padding: 1rem; border: 1px inset #eee; }
+ul { list-style: none; padding: 0; }
+li { padding: 0.5rem 0; border-bottom: 1px solid #eee; }

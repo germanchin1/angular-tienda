@@ -1,0 +1,29 @@
+<div class="container">
+  <aside class="filters">
+    <h3>Categorías</h3>
+    <ul>
+      <li (click)="filterByCategory(null)" [class.active]="!selectedCategory">Todo</li>
+      @for (cat of categories; track cat.id) {
+        <li (click)="filterByCategory(cat.id)" [class.active]="selectedCategory === cat.id">
+          {{ cat.name }}
+        </li>
+      }
+    </ul>
+  </aside>
+
+  <main class="products">
+    <h2>Catálogo de Productos</h2>
+    <div class="product-grid">
+      @for (prod of filteredProducts; track prod.id) {
+        <div class="product-card" [routerLink]="['/product', prod.slug]">
+          <img [src]="prod.image_url" [alt]="prod.name">
+          <div class="card-body">
+            <h3>{{ prod.name }}</h3>
+            <p class="description">{{ prod.description }}</p>
+            <p class="price">{{ prod.price | currency:'EUR' }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+</div>

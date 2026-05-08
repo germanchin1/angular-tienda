@@ -1,0 +1,71 @@
+<div class="admin-container">
+  <div class="header">
+    <h2>Gestión de Productos</h2>
+    <button (click)="openModal()" class="btn-new">Nuevo Producto</button>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (prod of products; track prod.id) {
+        <tr>
+          <td><img [src]="prod.image_url" width="50"></td>
+          <td>{{ prod.name }}</td>
+          <td>{{ getCategoryName(prod.category_id) }}</td>
+          <td>{{ prod.price | currency:'EUR' }}</td>
+          <td>{{ prod.stock }}</td>
+          <td>
+            <button (click)="openModal(prod)" class="btn-edit">Editar</button>
+            <button (click)="deleteProduct(prod.id)" class="btn-delete">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Simple Modal for Add/Edit -->
+  @if (showModal) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h3>{{ editingProduct ? 'Editar' : 'Nuevo' }} Producto</h3>
+        <form (ngSubmit)="saveProduct()">
+          <label>Nombre:</label>
+          <input type="text" [(ngModel)]="formProduct.name" name="name" required>
+          
+          <label>Descripción:</label>
+          <textarea [(ngModel)]="formProduct.description" name="description"></textarea>
+          
+          <label>Precio:</label>
+          <input type="number" [(ngModel)]="formProduct.price" name="price">
+          
+          <label>URL Imagen:</label>
+          <input type="text" [(ngModel)]="formProduct.image_url" name="image_url">
+          
+          <label>Stock:</label>
+          <input type="number" [(ngModel)]="formProduct.stock" name="stock">
+
+          <label>Categoría:</label>
+          <select [(ngModel)]="formProduct.category_id" name="category_id">
+            @for (cat of categories; track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+
+          <div class="modal-actions">
+            <button type="button" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="btn-save">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,32 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/">👟 SneakersShop</a>
+  </div>
+  <ul class="nav-links">
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+    <li><a routerLink="/catalog" routerLinkActive="active">Catálogo</a></li>
+    
+    @if (auth.isAdmin()) {
+      <li><a routerLink="/admin/products" routerLinkActive="active">Admin Productos</a></li>
+      <li><a routerLink="/admin/orders" routerLinkActive="active">Admin Pedidos</a></li>
+    }
+    
+    @if (auth.isLoggedIn() && !auth.isAdmin()) {
+      <li><a routerLink="/my-orders" routerLinkActive="active">Mis Pedidos</a></li>
+    }
+  </ul>
+
+  <div class="user-actions">
+    @if (auth.isLoggedIn()) {
+      @if (!auth.isAdmin()) {
+        <a routerLink="/cart" class="cart-icon">
+          🛒 <span class="badge" *ngIf="cart.totalItems() > 0">{{ cart.totalItems() }}</span>
+        </a>
+      }
+      <span class="username">Hola, {{ auth.currentUser()?.nombre }}</span>
+      <button (click)="auth.logout()" class="btn-logout">Salir</button>
+    } @else {
+      <a routerLink="/login" class="btn-login">Iniciar Sesión</a>
+    }
+  </div>
+</nav>

@@ -1,0 +1,11 @@
+.orders-container { padding: 2rem; max-width: 800px; margin: 0 auto; }
+.empty-state { text-align: center; padding: 4rem; background: #f8f9fa; border-radius: 8px; }
+.order-card { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
+.order-header { display: flex; justify-content: space-between; padding: 1rem; background: #eee; cursor: pointer; }
+.order-details { padding: 1rem; background: white; }
+.status { font-weight: bold; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; }
+.status[data-status="Pendiente"] { background: #ffeeba; color: #856404; }
+.status[data-status="Enviado"] { background: #b8daff; color: #004085; }
+.status[data-status="Entregado"] { background: #c3e6cb; color: #155724; }
+ul { list-style: none; padding: 0; }
+li { padding: 0.5rem 0; border-bottom: 1px solid #eee; }
