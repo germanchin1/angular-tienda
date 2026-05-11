@@ -1,6 +1,11 @@
 <div class="admin-container">
   <h2>Gestión de Pedidos (Admin)</h2>
 
+  @if (loading) {
+    <div class="loading-state"><p>Cargando pedidos...</p></div>
+  } @else if (errorMessage) {
+    <div class="loading-state"><p>{{ errorMessage }}</p></div>
+  } @else {
   <table class="admin-table">
     <thead>
       <tr>
@@ -18,13 +23,14 @@
           <td>#{{ order.id }}</td>
           <td>{{ order.user_id }}</td>
           <td>{{ order.created_at | date:'short' }}</td>
-          <td>{{ order.total | currency:'EUR' }}</td>
+          <td>{{ order.total_amount | currency:'EUR' }}</td>
           <td>
             <select [ngModel]="order.status" (ngModelChange)="updateStatus(order.id, $event)">
-              <option value="Pendiente">Pendiente</option>
-              <option value="Enviado">Enviado</option>
-              <option value="Entregado">Entregado</option>
-              <option value="Cancelado">Cancelado</option>
+              <option value="pending">Pendiente</option>
+              <option value="confirmed">Confirmado</option>
+              <option value="shipped">Enviado</option>
+              <option value="delivered">Entregado</option>
+              <option value="cancelled">Cancelado</option>
             </select>
           </td>
           <td>
@@ -37,14 +43,21 @@
           <tr class="details-row">
             <td colspan="6">
               <div class="details-content">
-                <p><strong>Dirección:</strong> {{ order.address }}</p>
-                <p><strong>Observaciones:</strong> {{ order.observations || 'N/A' }}</p>
+                <p><strong>Dirección:</strong> {{ order.shipping_address }}</p>
+                <p><strong>Observaciones:</strong> {{ order.notes || 'N/A' }}</p>
                 <h4>Items:</h4>
-                <ul>
-                  @for (item of order.items; track item.id) {
-                    <li>{{ item.quantity }}x Producto ID {{ item.product_id }} (Talla {{ item.size }}) - {{ item.price | currency:'EUR' }}</li>
-                  }
-                </ul>
+                @if (order.order_items?.length) {
+                  <ul>
+                    @for (item of order.order_items; track item.id) {
+                      <li>
+                        {{ item.quantity }}x {{ item.product?.name || 'Producto' }}
+                        (Talla {{ item.size || 'N/A' }}) - {{ item.unit_price | currency:'EUR' }}
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <p>No hay items asociados a este pedido.</p>
+                }
               </div>
             </td>
           </tr>
@@ -52,4 +65,5 @@
       }
     </tbody>
   </table>
+  }
 </div>

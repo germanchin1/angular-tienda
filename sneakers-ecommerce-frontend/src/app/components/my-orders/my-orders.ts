@@ -13,13 +13,13 @@ import { Order } from '../../models/interfaces';
 export class MyOrdersComponent implements OnInit {
   private orderService = inject(OrderService);
   orders: Order[] = [];
-  expandedOrderId: number | null = null;
+  expandedOrderId: string | null = null;
 
   ngOnInit() {
     this.orderService.getMyOrders().subscribe(data => this.orders = data);
   }
 
-  toggleDetails(id: number) {
+  toggleDetails(id: string) {
     this.expandedOrderId = this.expandedOrderId === id ? null : id;
   }
 }

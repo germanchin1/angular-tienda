@@ -1,46 +1,49 @@
 export interface User {
   id: string;
   email: string;
-  nombre: string;
-  role: 'Usuario' | 'Administrador';
+  full_name: string;
+  role: 'user' | 'admin';
 }
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
+  slug: string;
   description?: string;
 }
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;
   price: number;
   image_url: string;
-  category_id: number;
+  category_id: string;
   stock: number;
-  sizes: string[]; // JSON array in DB
+  sizes: string[];
   is_active: boolean;
+  brand?: string;
 }
 
 export interface Order {
-  id: number;
+  id: string;
   user_id: string;
-  total: number;
+  total_amount: number;
   status: string;
-  address: string;
-  observations?: string;
+  shipping_address: string;
+  notes?: string;
   created_at: string;
-  items?: OrderItem[];
+  order_items?: OrderItem[];
 }
 
 export interface OrderItem {
-  id: number;
-  order_id: number;
-  product_id: number;
+  id: string;
+  order_id: string;
+  product_id: string;
   quantity: number;
-  price: number;
+  unit_price: number;
   size: string;
   product?: Product;
+  products?: Product;
 }

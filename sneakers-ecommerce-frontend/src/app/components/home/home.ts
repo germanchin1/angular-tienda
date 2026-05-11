@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Product, Category } from '../../models/interfaces';
+import { HomePageData } from '../../resolvers/home.resolver';
 
 @Component({
   selector: 'app-home',
@@ -12,14 +12,16 @@ import { Product, Category } from '../../models/interfaces';
   styleUrl: './home.css'
 })
 export class HomeComponent implements OnInit {
-  private productService = inject(ProductService);
+  private route = inject(ActivatedRoute);
   categories: Category[] = [];
   featuredProducts: Product[] = [];
 
   ngOnInit() {
-    this.productService.getCategories().subscribe(cats => this.categories = cats);
-    this.productService.getProducts().subscribe(prods => {
-      this.featuredProducts = prods.slice(0, 4);
-    });
+    const data = this.route.snapshot.data['pageData'] as HomePageData | undefined;
+
+    if (data) {
+      this.categories = data.categories;
+      this.featuredProducts = data.products.slice(0, 4);
+    }
   }
 }

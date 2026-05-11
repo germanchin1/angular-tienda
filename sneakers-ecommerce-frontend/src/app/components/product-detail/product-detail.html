@@ -1,23 +1,29 @@
-<div class="detail-container" *ngIf="product">
+<div class="detail-state" *ngIf="errorMessage && !product">
+  <p>{{ errorMessage }}</p>
+</div>
+
+<div class="detail-state" *ngIf="!errorMessage && !product">
+  <p>El producto no está disponible.</p>
+</div>
+
+<div class="detail-container" *ngIf="product as currentProduct">
   <div class="image-box">
-    <img [src]="product.image_url" [alt]="product.name">
+    <img [src]="currentProduct.image_url || 'https://placehold.co/600x600?text=Sin+imagen'" [alt]="currentProduct.name">
   </div>
   <div class="info-box">
-    <h1>{{ product.name }}</h1>
-    <p class="price">{{ product.price | currency:'EUR' }}</p>
-    <p class="description">{{ product.description }}</p>
+    <h1>{{ currentProduct.name }}</h1>
+    <p class="price">{{ currentProduct.price | currency:'EUR' }}</p>
+    <p class="description">{{ currentProduct.description }}</p>
     
     <div class="options">
       <label>Talla:</label>
       <select [(ngModel)]="selectedSize">
         <option value="">Selecciona una talla</option>
-        @for (size of product.sizes; track size) {
-          <option [value]="size">{{ size }}</option>
-        }
+        <option *ngFor="let size of currentProduct.sizes" [value]="size">{{ size }}</option>
       </select>
 
       <label>Cantidad:</label>
-      <input type="number" [(ngModel)]="quantity" min="1" [max]="product.stock">
+      <input type="number" [(ngModel)]="quantity" min="1" [max]="currentProduct.stock">
     </div>
 
     <button (click)="addToCart()" class="btn-add" [disabled]="!selectedSize">

@@ -4,7 +4,12 @@
     <button (click)="openModal()" class="btn-new">Nuevo Producto</button>
   </div>
 
-  <table class="admin-table">
+  @if (loading) {
+    <div class="loading-state"><p>Cargando productos...</p></div>
+  } @else if (errorMessage) {
+    <div class="loading-state"><p>{{ errorMessage }}</p></div>
+  } @else {
+    <table class="admin-table">
     <thead>
       <tr>
         <th>Imagen</th>
@@ -31,6 +36,7 @@
       }
     </tbody>
   </table>
+  }
 
   <!-- Simple Modal for Add/Edit -->
   @if (showModal) {
@@ -53,6 +59,21 @@
           <label>Stock:</label>
           <input type="number" [(ngModel)]="formProduct.stock" name="stock">
 
+          <label>Tallas:</label>
+          <div class="size-grid">
+            @for (size of availableSizes; track size) {
+              <label class="size-label">
+                <input
+                  type="checkbox"
+                  name="size-{{ size }}"
+                  [checked]="formProduct.sizes?.includes(size)"
+                  (change)="toggleSize(size, $event.target.checked)"
+                />
+                {{ size }}
+              </label>
+            }
+          </div>
+
           <label>Categoría:</label>
           <select [(ngModel)]="formProduct.category_id" name="category_id">
             @for (cat of categories; track cat.id) {
@@ -61,7 +82,7 @@
           </select>
 
           <div class="modal-actions">
-            <button type="button" (click)="closeModal()">Cancelar</button>
+            <button type="button" (click)="closeModal()">Cerrar</button>
             <button type="submit" class="btn-save">Guardar</button>
           </div>
         </form>

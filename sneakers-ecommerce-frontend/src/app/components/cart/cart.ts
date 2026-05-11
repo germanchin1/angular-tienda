@@ -24,12 +24,12 @@ export class CartComponent {
 
   finishOrder() {
     const orderData = {
-      address: this.address,
-      observations: this.observations,
+      shipping_address: this.address,
+      notes: this.observations,
       items: this.cart.items().map(i => ({
         product_id: i.product.id,
         quantity: i.quantity,
-        price: i.product.price,
+        unit_price: i.product.price,
         size: i.size
       }))
     };

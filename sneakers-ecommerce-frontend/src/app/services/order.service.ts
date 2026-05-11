@@ -14,14 +14,14 @@ export class OrderService {
   }
 
   getMyOrders() {
-    return this.http.get<Order[]>(this.apiUrl);
+    return this.http.get<Order[]>(`${this.apiUrl}/my-orders`);
   }
 
   getAllOrders() {
-    return this.http.get<Order[]>(`${this.apiUrl}/admin/all`);
+    return this.http.get<Order[]>(this.apiUrl);
   }
 
-  updateOrderStatus(orderId: number, status: string) {
+  updateOrderStatus(orderId: string, status: string) {
     return this.http.patch<Order>(`${this.apiUrl}/${orderId}/status`, { status });
   }
 }

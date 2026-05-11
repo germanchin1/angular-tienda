@@ -1,8 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ProductService } from '../../../services/product.service';
 import { Product, Category } from '../../../models/interfaces';
+import { AdminProductsPageData } from '../../../resolvers/admin-products.resolver';
 
 @Component({
   selector: 'app-admin-products',
@@ -13,26 +16,50 @@ import { Product, Category } from '../../../models/interfaces';
 })
 export class AdminProductsComponent implements OnInit {
   private productService = inject(ProductService);
+  private route = inject(ActivatedRoute);
   products: Product[] = [];
   categories: Category[] = [];
+  availableSizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'];
   showModal = false;
   editingProduct: Product | null = null;
   formProduct: Partial<Product> = {};
+  loading = true;
+  errorMessage = '';
 
   ngOnInit() {
-    this.loadData();
-  }
-
-  loadOrders() { // Note: some methods might need renaming if I copied wrong earlier, fixing here
-    this.loadData();
+    const data = this.route.snapshot.data['pageData'] as AdminProductsPageData | undefined;
+    if (data) {
+      this.products = data.products;
+      this.categories = data.categories;
+      this.loading = false;
+    } else {
+      this.errorMessage = 'No se pudo cargar la lista de productos.';
+      this.loading = false;
+    }
   }
 
   loadData() {
-    this.productService.getProducts().subscribe(prods => this.products = prods);
-    this.productService.getCategories().subscribe(cats => this.categories = cats);
+    this.loading = true;
+    this.errorMessage = '';
+
+    forkJoin({
+      products: this.productService.getProducts(),
+      categories: this.productService.getCategories()
+    }).subscribe({
+      next: ({ products, categories }) => {
+        this.products = products;
+        this.categories = categories;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando productos/admin:', err);
+        this.errorMessage = 'No se pudieron cargar los productos.';
+        this.loading = false;
+      }
+    });
   }
 
-  getCategoryName(id: number) {
+  getCategoryName(id: string) {
     return this.categories.find(c => c.id === id)?.name || 'N/A';
   }
 
@@ -47,23 +74,51 @@ export class AdminProductsComponent implements OnInit {
     this.editingProduct = null;
   }
 
-  saveProduct() {
-    if (this.editingProduct) {
-      this.productService.updateProduct(this.editingProduct.id, this.formProduct).subscribe(() => {
-        this.loadData();
-        this.closeModal();
-      });
+  toggleSize(size: string, checked: boolean) {
+    const sizes = this.formProduct.sizes || [];
+    if (checked) {
+      this.formProduct.sizes = Array.from(new Set([...sizes, size]));
     } else {
-      this.productService.createProduct(this.formProduct).subscribe(() => {
-        this.loadData();
-        this.closeModal();
-      });
+      this.formProduct.sizes = sizes.filter(s => s !== size);
     }
   }
 
-  deleteProduct(id: number) {
-    if (confirm('¿Estás seguro de eliminar este producto (borrado lógico)?')) {
-      this.productService.deleteProduct(id).subscribe(() => this.loadData());
+  saveProduct() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    const request = this.editingProduct
+      ? this.productService.updateProduct(this.editingProduct.id, this.formProduct)
+      : this.productService.createProduct(this.formProduct);
+
+    request.subscribe({
+      next: () => {
+        this.loadData();
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error('Error guardando producto:', err);
+        this.errorMessage = 'No se pudo guardar el producto.';
+        this.loading = false;
+      }
+    });
+  }
+
+  deleteProduct(id: string) {
+    if (!confirm('¿Estás seguro de eliminar este producto (borrado lógico)?')) {
+      return;
     }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.productService.deleteProduct(id).subscribe({
+      next: () => this.loadData(),
+      error: (err) => {
+        console.error('Error eliminando producto:', err);
+        this.errorMessage = 'No se pudo eliminar el producto.';
+        this.loading = false;
+      }
+    });
   }
 }

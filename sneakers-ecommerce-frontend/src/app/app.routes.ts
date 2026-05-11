@@ -1,18 +1,28 @@
 import { Routes } from '@angular/router';
 import { authGuard, adminGuard } from './guards/auth.guard';
+import { homeResolver } from './resolvers/home.resolver';
+import { catalogResolver } from './resolvers/catalog.resolver';
+import { productResolver } from './resolvers/product.resolver';
+import { adminProductsResolver } from './resolvers/admin-products.resolver';
+import { adminOrdersResolver } from './resolvers/admin-orders.resolver';
 
 export const routes: Routes = [
   { 
     path: '', 
-    loadComponent: () => import('./components/home/home').then(c => c.HomeComponent) 
+    loadComponent: () => import('./components/home/home').then(c => c.HomeComponent),
+    resolve: { pageData: homeResolver }
   },
   { 
     path: 'catalog', 
-    loadComponent: () => import('./components/catalog/catalog').then(c => c.CatalogComponent) 
+    loadComponent: () => import('./components/catalog/catalog').then(c => c.CatalogComponent),
+    resolve: { pageData: catalogResolver },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
   { 
     path: 'product/:slug', 
-    loadComponent: () => import('./components/product-detail/product-detail').then(c => c.ProductDetailComponent) 
+    loadComponent: () => import('./components/product-detail/product-detail').then(c => c.ProductDetailComponent),
+    resolve: { product: productResolver },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
   { 
     path: 'login', 
@@ -35,12 +45,14 @@ export const routes: Routes = [
   { 
     path: 'admin/products', 
     loadComponent: () => import('./components/admin/admin-products/admin-products').then(c => c.AdminProductsComponent),
-    canActivate: [adminGuard] 
+    canActivate: [adminGuard],
+    resolve: { pageData: adminProductsResolver }
   },
   { 
     path: 'admin/orders', 
     loadComponent: () => import('./components/admin/admin-orders/admin-orders').then(c => c.AdminOrdersComponent),
-    canActivate: [adminGuard] 
+    canActivate: [adminGuard],
+    resolve: { pageData: adminOrdersResolver }
   },
   { path: '**', redirectTo: '' }
 ];

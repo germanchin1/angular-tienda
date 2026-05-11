@@ -12,15 +12,16 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './register.css'
 })
 export class RegisterComponent {
-  nombre = '';
+  full_name = '';
   email = '';
   password = '';
   confirmPassword = '';
+  isAdmin = false;
   private auth = inject(AuthService);
   private router = inject(Router);
 
   onRegister() {
-    this.auth.register(this.nombre, this.email, this.password).subscribe({
+    this.auth.register(this.full_name, this.email, this.password, this.isAdmin).subscribe({
       next: () => this.router.navigate(['/']),
       error: (err) => alert('Error al registrarse: ' + err.error.error)
     });

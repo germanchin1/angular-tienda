@@ -65,7 +65,7 @@ export const getUserOrders = async (req, res) => {
       *,
       order_items (
         *,
-        products ( name, image_url, brand )
+        product:products ( name, image_url, brand )
       )
     `)
     .eq('user_id', req.user.id)
@@ -87,7 +87,7 @@ export const getAllOrders = async (req, res) => {
     orders.map(async order => {
       const { data: items } = await supabase
         .from('order_items')
-        .select('*, products(name, image_url, brand)')
+        .select('*, product:products(name, image_url, brand)')
         .eq('order_id', order.id)
 
       return { ...order, order_items: items || [] }

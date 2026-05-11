@@ -4,6 +4,7 @@ import { uploadToCloudinary } from '../middleware/upload.middleware.js'
 export const getProducts = async (req, res) => {
   const { category, search, page = 1, limit = 12 } = req.query
   const offset = (page - 1) * limit
+  console.log('Fetching products with params:', { category, search, page, limit })
 
   // Si viene filtro de categoría, buscamos primero su ID por slug
   let categoryId = null
@@ -14,8 +15,12 @@ export const getProducts = async (req, res) => {
       .eq('slug', category)
       .single()
 
-    if (!cat) return res.json({ data: [], total: 0, page: Number(page), limit: Number(limit) })
+    if (!cat) {
+      console.log('Category not found:', category)
+      return res.json({ data: [], total: 0, page: Number(page), limit: Number(limit) })
+    }
     categoryId = cat.id
+    console.log('Category found, ID:', categoryId)
   }
 
   let query = supabase
@@ -30,12 +35,18 @@ export const getProducts = async (req, res) => {
 
   const { data, error, count } = await query
 
-  if (error) return res.status(500).json({ error: error.message })
+  if (error) {
+    console.error('Error fetching products from Supabase:', error.message)
+    return res.status(500).json({ error: error.message })
+  }
+  
+  console.log(`Returning ${data.length} products (Total count: ${count})`)
   res.json({ data, total: count, page: Number(page), limit: Number(limit) })
 }
 
 export const getProductBySlug = async (req, res) => {
   const { slug } = req.params
+  console.log('Fetching product by slug:', slug)
 
   const { data, error } = await supabase
     .from('products')
@@ -44,24 +55,33 @@ export const getProductBySlug = async (req, res) => {
     .eq('is_active', true)
     .single()
 
-  if (error) return res.status(404).json({ error: 'Producto no encontrado' })
+  if (error) {
+    console.error('Error fetching product by slug:', error.message)
+    return res.status(404).json({ error: 'Producto no encontrado' })
+  }
+  
+  console.log('Product found:', data.name)
   res.json(data)
 }
 
 export const createProduct = async (req, res) => {
   const body = { ...req.body }
 
-  // Subir imagen a Cloudinary si viene
-  let image_url = null
+  // Usar una URL de imagen directa si llega, o subir el archivo si se envía uno.
+  let image_url = body.image_url || null
   if (req.file) {
     const result = await uploadToCloudinary(req.file.buffer)
     image_url = result.secure_url
   }
 
-  // Parsear sizes si viene como string JSON
+  // Parsear sizes si viene como string JSON o array
   let sizes = []
-  if (body.sizes && typeof body.sizes === 'string') {
-    sizes = JSON.parse(body.sizes)
+  if (body.sizes) {
+    if (Array.isArray(body.sizes)) {
+      sizes = body.sizes
+    } else if (typeof body.sizes === 'string') {
+      sizes = JSON.parse(body.sizes)
+    }
   }
 
   const { data, error } = await supabase.rpc('insert_product', {
@@ -83,17 +103,21 @@ export const updateProduct = async (req, res) => {
   const { id } = req.params
   const body = { ...req.body }
 
-  // Subir imagen a Cloudinary si viene una nueva
-  let image_url = undefined
+  // Usar una URL de imagen directa si llega, o subir el archivo si se envía uno.
+  let image_url = body.image_url !== undefined ? body.image_url : undefined
   if (req.file) {
     const result = await uploadToCloudinary(req.file.buffer)
     image_url = result.secure_url
   }
 
-  // Parsear sizes si viene como string JSON
+  // Parsear sizes si viene como string JSON o array
   let sizes = undefined
-  if (body.sizes && typeof body.sizes === 'string') {
-    sizes = JSON.parse(body.sizes)
+  if (body.sizes) {
+    if (Array.isArray(body.sizes)) {
+      sizes = body.sizes
+    } else if (typeof body.sizes === 'string') {
+      sizes = JSON.parse(body.sizes)
+    }
   }
 
   // Llamamos a la función RPC con SECURITY DEFINER
@@ -107,7 +131,7 @@ export const updateProduct = async (req, res) => {
     p_category_id: body.category_id || null,
     p_sizes:       sizes            || null,
     p_image_url:   image_url        || null,
-    p_is_active:   body.is_active !== undefined ? body.is_active === 'true' : null
+    p_is_active:   body.is_active !== undefined ? (body.is_active === 'true' || body.is_active === true) : null
   })
 
   if (error) return res.status(500).json({ error: error.message })

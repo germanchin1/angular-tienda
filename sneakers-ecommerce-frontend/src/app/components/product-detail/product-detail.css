@@ -5,6 +5,14 @@
   max-width: 1000px;
   margin: 0 auto;
 }
+.detail-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 3rem;
+  text-align: center;
+}
 .image-box { flex: 1; }
 .image-box img { width: 100%; border-radius: 12px; }
 .info-box { flex: 1; }

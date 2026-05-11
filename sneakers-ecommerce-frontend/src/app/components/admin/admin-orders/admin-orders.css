@@ -1,5 +1,6 @@
 .admin-container { padding: 2rem; }
 .admin-table { width: 100%; border-collapse: collapse; }
+.loading-state { padding: 2rem; text-align: center; color: #666; }
 .admin-table th, .admin-table td { padding: 1rem; border-bottom: 1px solid #ddd; text-align: left; }
 select { padding: 0.3rem; border-radius: 4px; }
 .btn-details { background: #6c757d; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; }

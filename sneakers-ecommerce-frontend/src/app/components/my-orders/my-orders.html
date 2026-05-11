@@ -10,24 +10,31 @@
       @for (order of orders; track order.id) {
         <div class="order-card">
           <div class="order-header" (click)="toggleDetails(order.id)">
-            <span>Pedido #{{ order.id }}</span>
+            <span>Pedido #{{ order.id.substring(0,8) }}</span>
             <span>{{ order.created_at | date:'short' }}</span>
             <span class="status" [attr.data-status]="order.status">{{ order.status }}</span>
-            <span>{{ order.total | currency:'EUR' }}</span>
+            <span>{{ order.total_amount | currency:'EUR' }}</span>
             <span>{{ expandedOrderId === order.id ? '🔼' : '🔽' }}</span>
           </div>
           
           @if (expandedOrderId === order.id) {
             <div class="order-details">
-              <p><strong>Dirección:</strong> {{ order.address }}</p>
-              <p><strong>Observaciones:</strong> {{ order.observations || 'Ninguna' }}</p>
+              <p><strong>Dirección:</strong> {{ order.shipping_address }}</p>
+              <p><strong>Observaciones:</strong> {{ order.notes || 'Ninguna' }}</p>
               <hr>
               <h4>Productos:</h4>
-              <ul>
-                @for (item of order.items; track item.id) {
-                  <li>{{ item.quantity }}x {{ item.product?.name }} (Talla {{ item.size }}) - {{ item.price | currency:'EUR' }}</li>
-                }
-              </ul>
+              @if (order.order_items?.length) {
+                <ul>
+                  @for (item of order.order_items; track item.id) {
+                    <li>
+                      {{ item.quantity }}x {{ item.product?.name || 'Producto' }}
+                      (Talla {{ item.size || 'N/A' }}) - {{ item.unit_price | currency:'EUR' }}
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p>No se pudieron cargar los productos de este pedido.</p>
+              }
             </div>
           }
         </div>

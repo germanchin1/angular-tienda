@@ -12,24 +12,26 @@ export class AuthService {
 
   currentUser = signal<User | null>(this.getUserFromStorage());
 
-  constructor() {}
+  constructor() { }
 
-  login(email: string, contrasena: string) {
-    return this.http.post<{ user: User, token: string }>(`${this.apiUrl}/login`, { email, contrasena })
+  login(email: string, password: string) {
+    return this.http.post<{ user: User, access_token: string }>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         tap(res => {
-          this.saveAuthData(res.user, res.token);
+          this.saveAuthData(res.user, res.access_token);
           this.currentUser.set(res.user);
         })
       );
   }
 
-  register(nombre: string, email: string, contrasena: string) {
-    return this.http.post<{ user: User, token: string }>(`${this.apiUrl}/register`, { nombre, email, contrasena })
+  register(full_name: string, email: string, password: string, isAdmin = false) {
+    return this.http.post<{ user: User, access_token: string }>(`${this.apiUrl}/register`, { full_name, email, password, is_admin: isAdmin })
       .pipe(
         tap(res => {
-          this.saveAuthData(res.user, res.token);
-          this.currentUser.set(res.user);
+          if (res.access_token) {
+            this.saveAuthData(res.user, res.access_token);
+            this.currentUser.set(res.user);
+          }
         })
       );
   }
@@ -45,7 +47,7 @@ export class AuthService {
   }
 
   isAdmin() {
-    return this.currentUser()?.role === 'Administrador';
+    return this.currentUser()?.role === 'admin';
   }
 
   isLoggedIn() {

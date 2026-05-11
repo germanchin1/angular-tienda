@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { ProductService } from '../../services/product.service';
 import { Product, Category } from '../../models/interfaces';
+import { CatalogPageData } from '../../resolvers/catalog.resolver';
 
 @Component({
   selector: 'app-catalog',
@@ -12,32 +12,35 @@ import { Product, Category } from '../../models/interfaces';
   styleUrl: './catalog.css'
 })
 export class CatalogComponent implements OnInit {
-  private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
 
   products: Product[] = [];
   filteredProducts: Product[] = [];
   categories: Category[] = [];
-  selectedCategory: number | null = null;
+  selectedCategory: string | null = null;
 
   ngOnInit() {
-    this.productService.getCategories().subscribe(cats => this.categories = cats);
-    this.productService.getProducts().subscribe(prods => {
-      this.products = prods;
-      this.route.queryParams.subscribe(params => {
-        if (params['category']) {
-          this.filterByCategory(+params['category']);
-        } else {
-          this.filteredProducts = prods;
-        }
-      });
+    console.log('CatalogComponent initialized');
+    const data = this.route.snapshot.data['pageData'] as CatalogPageData | undefined;
+
+    if (data) {
+      this.categories = data.categories;
+      this.products = data.products;
+    }
+
+    this.route.queryParamMap.subscribe(paramMap => {
+      const category = paramMap.get('category');
+      console.log('Query params changed:', { category });
+      this.filterByCategory(category);
     });
   }
 
-  filterByCategory(id: number | null) {
+  filterByCategory(id: string | null) {
+    console.log('Filtering by category ID:', id);
     this.selectedCategory = id;
     if (id) {
       this.filteredProducts = this.products.filter(p => p.category_id === id);
+      console.log('Filtered products count:', this.filteredProducts.length);
     } else {
       this.filteredProducts = this.products;
     }
