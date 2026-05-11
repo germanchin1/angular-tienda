@@ -25,47 +25,95 @@
 }
 .categories-section, .featured-section {
   padding: 3rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.categories-section h2,
+.featured-section h2 {
+  text-align: center;
+  color: #f4f4f4;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  animation: popIn 0.65s ease backwards;
 }
 .category-grid, .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 .category-card {
-  background: #1b1028;
+  background: rgba(26, 18, 38, 0.85);
+  animation: fadeInUp 0.8s ease backwards;
   padding: 2rem;
   text-align: center;
-  border-radius: 16px;
+  border-radius: 18px;
   cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
-  border: 1px solid rgba(157, 32, 83, 0.15);
+  transition: transform 0.25s ease, background 0.25s ease;
+  border: 1px solid rgba(157, 32, 83, 0.18);
+  color: #f4f4f4;
 }
 .category-card:hover {
-  transform: translateY(-5px);
-  background: #341931;
+  transform: translateY(-6px);
+  background: rgba(52, 25, 49, 0.95);
+}
+.category-card h3,
+.card-body h3 {
+  color: #f4f4f4;
+  text-align: center;
 }
 .product-card {
-  background: #181a2d;
-  border: 1px solid rgba(157, 32, 83, 0.15);
-  border-radius: 16px;
+  background: rgba(24, 26, 45, 0.92);
+  border: 1px solid rgba(157, 32, 83, 0.18);
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: fadeInUp 0.8s ease backwards;
 }
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.32);
 }
 .product-card img {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
 }
 .card-body {
-  padding: 1rem;
+  padding: 1.15rem;
+}
+.card-body h3,
+.card-body p,
+.card-body .price {
+  margin: 0;
+}
+.card-body h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+.card-body p {
+  font-size: 0.95rem;
+  color: #d5d5d5;
+  margin-bottom: 1rem;
 }
 .price {
-  font-weight: bold;
+  font-weight: 700;
   color: #9d2053;
+}
+.categories-section h2,
+.featured-section h2 {
+  animation: popIn 0.6s ease backwards;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatCard {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
 }

@@ -3,11 +3,45 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 2rem 3rem;
   background: #341931;
   color: #f4f4f4;
   border-bottom: 1px solid #571b3c;
   overflow: hidden;
+}
+.navbar-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6rem;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bubbles {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.bubble {
+  position: absolute;
+  left: var(--position, 50%);
+  bottom: -4rem;
+  width: var(--size, 3rem);
+  height: var(--size, 3rem);
+  background: rgba(157, 32, 83, 0.25);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  animation: bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s),
+             bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s);
+}
+@keyframes bubble-move {
+  0% { bottom: -4rem; }
+  100% { bottom: var(--distance, 10rem); }
+}
+@keyframes bubble-size {
+  0%, 75% { width: var(--size, 3rem); height: var(--size, 3rem); }
+  100% { width: 0; height: 0; }
 }
 .logo a {
   display: inline-flex;
@@ -65,7 +99,7 @@
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
 }
-.btn-login, .btn-logout {
+.btn-login, .btn-logout, .btn-cart {
   padding: 0.5rem 1rem;
   border-radius: 999px;
   cursor: pointer;

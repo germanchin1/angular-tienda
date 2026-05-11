@@ -8,6 +8,7 @@
   <ul class="nav-links">
     <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
     <li><a routerLink="/catalog" routerLinkActive="active">Catálogo</a></li>
+    <li><a routerLink="/cart" routerLinkActive="active" class="btn-cart">Carrito</a></li>
     
     @if (auth.isAdmin()) {
       <li><a routerLink="/admin/products" routerLinkActive="active">Admin Productos</a></li>
@@ -32,5 +33,19 @@
     } @else {
       <a routerLink="/login" class="btn-login">Iniciar Sesión</a>
     }
+  </div>
+
+  <div class="navbar-footer">
+    <div class="bubbles">
+      @for (bubble of bubbles; track bubble.position) {
+        <div class="bubble" [ngStyle]="{
+          '--size': bubble.size + 'rem',
+          '--distance': bubble.distance + 'rem',
+          '--position': bubble.position + '%',
+          '--time': bubble.time + 's',
+          '--delay': bubble.delay + 's'
+        }"></div>
+      }
+    </div>
   </div>
 </nav>
