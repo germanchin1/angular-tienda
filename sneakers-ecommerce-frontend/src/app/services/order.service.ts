@@ -18,10 +18,16 @@ export class OrderService {
   }
 
   getAllOrders() {
-    return this.http.get<Order[]>(this.apiUrl);
+    const token = localStorage.getItem('token');
+    return this.http.get<Order[]>(this.apiUrl, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
   }
 
   updateOrderStatus(orderId: string, status: string) {
-    return this.http.patch<Order>(`${this.apiUrl}/${orderId}/status`, { status });
+    const token = localStorage.getItem('token');
+    return this.http.patch<Order>(`${this.apiUrl}/${orderId}/status`, { status }, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
   }
 }

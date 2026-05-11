@@ -47,11 +47,11 @@ export class AuthService {
   }
 
   isAdmin() {
-    return this.currentUser()?.role === 'admin';
+    return !!this.getToken() && this.currentUser()?.role === 'admin';
   }
 
   isLoggedIn() {
-    return !!this.currentUser();
+    return !!this.getToken() && !!this.currentUser();
   }
 
   private saveAuthData(user: User, token: string) {

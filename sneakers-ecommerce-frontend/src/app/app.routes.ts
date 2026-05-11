@@ -51,8 +51,7 @@ export const routes: Routes = [
   { 
     path: 'admin/orders', 
     loadComponent: () => import('./components/admin/admin-orders/admin-orders').then(c => c.AdminOrdersComponent),
-    canActivate: [adminGuard],
-    resolve: { pageData: adminOrdersResolver }
+    canActivate: [adminGuard]
   },
   { path: '**', redirectTo: '' }
 ];
