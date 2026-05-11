@@ -3,15 +3,36 @@
   top: 64px;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(17, 22, 37, 0.95);
   display: flex;
   justify-content: center;
   padding: 1rem;
   z-index: 1000;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(157, 32, 83, 0.25);
 }
 
 .loader {
   font-weight: bold;
-  color: #333;
+  color: #f4f4f4;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background: #111625;
+  color: #f4f4f4;
+}
+
+main {
+  min-height: calc(100vh - 64px);
+}
+
+a {
+  color: inherit;
+}
+
+button, input, textarea, select {
+  font: inherit;
 }

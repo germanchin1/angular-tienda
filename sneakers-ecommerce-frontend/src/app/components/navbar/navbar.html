@@ -1,6 +1,9 @@
 <nav class="navbar">
   <div class="logo">
-    <a routerLink="/">👟 SneakersShop</a>
+    <a routerLink="/">
+      <svg class="logo-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14l2-2 1 1 3-3 1 1 4-4 2 2-5 5 1 1-3 3-1-1-2 2-2-2z" fill="currentColor"/></svg>
+      la tienda de los zapatos
+    </a>
   </div>
   <ul class="nav-links">
     <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
@@ -19,8 +22,9 @@
   <div class="user-actions">
     @if (auth.isLoggedIn()) {
       @if (!auth.isAdmin()) {
-        <a routerLink="/cart" class="cart-icon">
-          🛒 <span class="badge" *ngIf="cart.totalItems() > 0">{{ cart.totalItems() }}</span>
+        <a routerLink="/cart" class="cart-icon" aria-label="Carrito">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="18" cy="20" r="1.5" fill="currentColor"/></svg>
+          <span class="badge" *ngIf="cart.totalItems() > 0">{{ cart.totalItems() }}</span>
         </a>
       }
       <span class="username">Hola, {{ auth.currentUser()?.full_name }}</span>

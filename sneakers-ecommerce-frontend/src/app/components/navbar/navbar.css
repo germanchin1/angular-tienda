@@ -1,16 +1,26 @@
 .navbar {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: #333;
-  color: white;
+  padding: 1.5rem 2rem;
+  background: #341931;
+  color: #f4f4f4;
+  border-bottom: 1px solid #571b3c;
+  overflow: hidden;
 }
 .logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f4f4f4;
   text-decoration: none;
+}
+.logo-icon {
+  width: 28px;
+  height: 28px;
 }
 .nav-links {
   display: flex;
@@ -23,8 +33,8 @@
   font-weight: 500;
 }
 .nav-links a.active {
-  color: white;
-  border-bottom: 2px solid white;
+  color: #f4f4f4;
+  border-bottom: 2px solid #9d2053;
 }
 .user-actions {
   display: flex;
@@ -33,34 +43,71 @@
 }
 .cart-icon {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: #f4f4f4;
   text-decoration: none;
-  font-size: 1.2rem;
+}
+.cart-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 .badge {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  background: red;
-  color: white;
+  top: -0.4rem;
+  right: -0.4rem;
+  background: #9d2053;
+  color: #fff;
   font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 50%;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
 }
 .btn-login, .btn-logout {
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 999px;
   cursor: pointer;
   border: none;
+  text-decoration: none;
+  font-weight: 600;
 }
 .btn-login {
-  background: #007bff;
+  background: #9d2053;
   color: white;
-  text-decoration: none;
+}
+.btn-login:hover {
+  background: #7a1e48;
 }
 .btn-logout {
-  background: #dc3545;
+  background: #571b3c;
   color: white;
+}
+.btn-logout:hover {
+  background: #341931;
 }
 .username {
   font-weight: bold;
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: -25%;
+  bottom: -24px;
+  width: 150%;
+  height: 70px;
+  background: radial-gradient(circle at 20% 30%, rgba(157,32,83,0.45) 20%, transparent 22%),
+              radial-gradient(circle at 50% 50%, rgba(122,30,72,0.35) 20%, transparent 22%),
+              radial-gradient(circle at 80% 35%, rgba(89,27,60,0.3) 18%, transparent 20%);
+  opacity: 0.95;
+  transform: translateX(0);
+  animation: wave 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes wave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
 }
